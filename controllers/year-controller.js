@@ -1,16 +1,9 @@
 const fs = require('fs');
 
-const compare = (a, b) => {
-  const percentA = a.percentage;
-  const percentB = b.percentage;
-
-  let comparison = 0;
-  if (percentA > percentB) {
-    comparison = -1;
-  } else if (percentA < percentB) {
-    comparison = 1;
-  }
-  return comparison;
+const compareByKey = (a, b) => b.key - a.key;
+const compareByPercentage = (a, b) => b.percentage - a.percentage;
+const filterByValue = (arr, key) => {
+  return arr.filter((o) => o.key);
 };
 
 const getTotalYear = (req, res) => {
@@ -35,9 +28,27 @@ const getTotalYear = (req, res) => {
         key: year,
       };
       result.breakdown.push(newComponent);
-      result.breakdown.sort(compare);
     });
 
+    result.breakdown.sort(compareByKey);
+    console.log(JSON.stringify(result.breakdown));
+    const reducedArray = result.breakdown.reduce((acc, next) => {
+      // acc stands for accumulator
+      const lastItemIndex = acc.length - 1;
+      const accHasContent = acc.length >= 1;
+
+      if (accHasContent && acc[lastItemIndex].key === next.key) {
+        acc[lastItemIndex].percentage += next.percentage;
+      } else {
+        // first time seeing this entry. add it!
+        acc[lastItemIndex + 1] = next;
+      }
+      return acc;
+    }, []);
+
+    result.breakdown = reducedArray;
+
+    result.breakdown.sort(compareByPercentage);
     res.send(result);
   });
 };
