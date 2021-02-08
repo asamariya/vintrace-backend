@@ -2,9 +2,6 @@ const fs = require('fs');
 
 const compareByKey = (a, b) => b.key - a.key;
 const compareByPercentage = (a, b) => b.percentage - a.percentage;
-const filterByValue = (arr, key) => {
-  return arr.filter((o) => o.key);
-};
 
 const getTotalYear = (req, res) => {
   const { lotCode } = req.params;
@@ -31,7 +28,7 @@ const getTotalYear = (req, res) => {
     });
 
     result.breakdown.sort(compareByKey);
-    console.log(JSON.stringify(result.breakdown));
+
     const reducedArray = result.breakdown.reduce((acc, next) => {
       // acc stands for accumulator
       const lastItemIndex = acc.length - 1;
