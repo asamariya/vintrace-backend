@@ -4,6 +4,7 @@ const yearRoutes = require('./routes/year-routes');
 const regionRoutes = require('./routes/region-routes');
 const varietyRoutes = require('./routes/variety-routes');
 const yearVarietyRoutes = require('./routes/year-variety-routes');
+const searchRoutes = require('./routes/search-routes');
 
 //set up express
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api/breakdown/year', yearRoutes);
 app.use('/api/breakdown/region', regionRoutes);
 app.use('/api/breakdown/variety', varietyRoutes);
 app.use('/api/breakdown/year-variety', yearVarietyRoutes);
+app.use('/api/breakdown/search/', searchRoutes);
 
 // launch server
 app.listen(PORT, () => console.log(`The server has started on PORT: ${PORT}`));
