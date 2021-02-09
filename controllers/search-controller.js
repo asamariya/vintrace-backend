@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const getWine = (req, res) => {
+const getWines = (req, res) => {
   try {
     const { searchTerm } = req.query;
     const dir = fs.readdirSync('./data');
@@ -13,7 +13,7 @@ const getWine = (req, res) => {
 
     const filteredData = data.filter(
       (x) =>
-        x.lotCode.includes(searchTerm) ||
+        x.lotCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (x.description || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
     res.json(filteredData);
@@ -22,4 +22,22 @@ const getWine = (req, res) => {
   }
 };
 
+const getWine = (req, res) => {
+  const { lotCode } = req.params;
+
+  const dataPath = `./data/${lotCode}.json`;
+  try {
+    fs.readFile(dataPath, 'utf8', (err, data) => {
+      if (err) {
+        throw err;
+      }
+      const wine = JSON.parse(data);
+      res.json(wine);
+    });
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
+};
+
+exports.getWines = getWines;
 exports.getWine = getWine;
