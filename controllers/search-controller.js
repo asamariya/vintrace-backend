@@ -14,7 +14,7 @@ const getWine = (req, res) => {
     const filteredData = data.filter(
       (x) =>
         x.lotCode.includes(searchTerm) ||
-        (x.description || '').includes(searchTerm)
+        (x.description || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
     res.json(filteredData);
   } catch (err) {
