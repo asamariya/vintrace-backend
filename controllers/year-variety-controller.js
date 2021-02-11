@@ -58,6 +58,7 @@ const getTotalYearVariety = (req, res) => {
   } catch (err) {
     res.status(404).json({
       msg: 'No data found with that lotCode, please check and try again.',
+      error: err.message,
     });
   }
 };

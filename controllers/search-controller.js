@@ -25,15 +25,11 @@ const getWines = (req, res) => {
 const getWine = (req, res) => {
   const { lotCode } = req.params;
 
-  const dataPath = `./data/${lotCode}.json`;
   try {
-    fs.readFile(dataPath, 'utf8', (err, data) => {
-      if (err) {
-        throw err;
-      }
-      const wine = JSON.parse(data);
-      res.json(wine);
-    });
+    const dataPath = `./data/${lotCode}.json`;
+    const data = fs.readFileSync(dataPath);
+    const wine = JSON.parse(data);
+    res.json(wine);
   } catch (err) {
     res.json({ msg: err.message });
   }

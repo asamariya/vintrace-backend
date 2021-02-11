@@ -1,3 +1,4 @@
+const fs = require('fs');
 const compareByKey = (a, b) => {
   if (a.key < b.key) {
     return -1;
@@ -27,6 +28,42 @@ const arrReducer = (arr) => {
   return reducedArray;
 };
 
+const getTotal = (lotCode, type) => {
+  const dataPath = `./data/${lotCode}.json`;
+
+  const data = fs.readFileSync(dataPath);
+
+  const wine = JSON.parse(data);
+
+  const result = {
+    breakDownType: type,
+    breakdown: [],
+  };
+
+  wine.components.forEach((component) => {
+    const { percentage } = component;
+
+    const key = component[type];
+
+    const newComponent = {
+      percentage,
+      key,
+    };
+    result.breakdown.push(newComponent);
+  });
+
+  result.breakdown.sort(compareByKey);
+
+  const reducedArray = arrReducer(result.breakdown);
+
+  result.breakdown = reducedArray;
+
+  result.breakdown.sort(compareByPercentage);
+
+  return result;
+};
+
 exports.compareByKey = compareByKey;
 exports.compareByPercentage = compareByPercentage;
 exports.arrReducer = arrReducer;
+exports.getTotal = getTotal;
