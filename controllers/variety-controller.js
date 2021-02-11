@@ -1,17 +1,12 @@
 const fs = require('fs');
-
 const helpers = require('../utils/helpers');
 
 const getTotalVariety = (req, res) => {
   const { lotCode } = req.params;
+  try {
+    const dataPath = `./data/${lotCode}.json`;
 
-  const dataPath = `./data/${lotCode}.json`;
-
-  fs.readFile(dataPath, 'utf8', (err, data) => {
-    if (err) {
-      throw err;
-    }
-
+    const data = fs.readFileSync(dataPath);
     const wine = JSON.parse(data);
     const result = {
       breakDownType: 'variety',
@@ -47,7 +42,11 @@ const getTotalVariety = (req, res) => {
 
     result.breakdown.sort(helpers.compareByPercentage);
     res.send(result);
-  });
+  } catch (err) {
+    res.status(404).json({
+      msg: 'No data found with that lotCode, please check and try again.',
+    });
+  }
 };
 
 exports.getTotalVariety = getTotalVariety;

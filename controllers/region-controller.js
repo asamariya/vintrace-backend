@@ -4,14 +4,11 @@ const helpers = require('../utils/helpers');
 const getTotalRegion = (req, res) => {
   const { lotCode } = req.params;
 
-  const dataPath = `./data/${lotCode}.json`;
-
-  fs.readFile(dataPath, 'utf8', (err, data) => {
-    if (err) {
-      throw err;
-    }
-
+  try {
+    const dataPath = `./data/${lotCode}.json`;
+    const data = fs.readFileSync(dataPath);
     const wine = JSON.parse(data);
+
     const result = {
       breakDownType: 'region',
       breakdown: [],
@@ -46,7 +43,9 @@ const getTotalRegion = (req, res) => {
 
     result.breakdown.sort(helpers.compareByPercentage);
     res.send(result);
-  });
+  } catch (err) {
+    res.status(404).json({ msg: err.message });
+  }
 };
 
 exports.getTotalRegion = getTotalRegion;
