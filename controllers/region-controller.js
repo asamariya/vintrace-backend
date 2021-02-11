@@ -1,15 +1,5 @@
 const fs = require('fs');
-
-const compareByKey = (a, b) => {
-  if (a.key < b.key) {
-    return -1;
-  }
-  if (a.key > b.key) {
-    return 1;
-  }
-  return 0;
-};
-const compareByPercentage = (a, b) => b.percentage - a.percentage;
+const helpers = require('../utils/helpers');
 
 const getTotalRegion = (req, res) => {
   const { lotCode } = req.params;
@@ -36,7 +26,7 @@ const getTotalRegion = (req, res) => {
       result.breakdown.push(newComponent);
     });
 
-    result.breakdown.sort(compareByKey);
+    result.breakdown.sort(helpers.compareByKey);
 
     const reducedArray = result.breakdown.reduce((acc, next) => {
       // acc stands for accumulator
@@ -54,7 +44,7 @@ const getTotalRegion = (req, res) => {
 
     result.breakdown = reducedArray;
 
-    result.breakdown.sort(compareByPercentage);
+    result.breakdown.sort(helpers.compareByPercentage);
     res.send(result);
   });
 };

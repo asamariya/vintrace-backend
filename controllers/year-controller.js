@@ -1,7 +1,5 @@
 const fs = require('fs');
-
-const compareByKey = (a, b) => b.key - a.key;
-const compareByPercentage = (a, b) => b.percentage - a.percentage;
+const helpers = require('../utils/helpers');
 
 const getTotalYear = (req, res) => {
   const { lotCode } = req.params;
@@ -29,7 +27,7 @@ const getTotalYear = (req, res) => {
         result.breakdown.push(newComponent);
       });
 
-      result.breakdown.sort(compareByKey);
+      result.breakdown.sort(helpers.compareByKey);
 
       const reducedArray = result.breakdown.reduce((acc, next) => {
         // acc stands for accumulator
@@ -47,7 +45,7 @@ const getTotalYear = (req, res) => {
 
       result.breakdown = reducedArray;
 
-      result.breakdown.sort(compareByPercentage);
+      result.breakdown.sort(helpers.compareByPercentage);
       res.send(result);
     });
   } catch (err) {

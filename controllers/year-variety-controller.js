@@ -1,4 +1,5 @@
 const fs = require('fs');
+const helpers = require('../utils/helpers');
 
 const compareByKey = (a, b) => {
   if (a.key === b.key) {
@@ -7,8 +8,6 @@ const compareByKey = (a, b) => {
 
   return a.key > b.key ? 1 : -1;
 };
-
-const compareByPercentage = (a, b) => b.percentage - a.percentage;
 
 const getTotalYearVariety = (req, res) => {
   const { lotCode } = req.params;
@@ -59,7 +58,7 @@ const getTotalYearVariety = (req, res) => {
 
       result.breakdown = reducedArray;
 
-      result.breakdown.sort(compareByPercentage);
+      result.breakdown.sort(helpers.compareByPercentage);
       res.send(result);
     });
   } catch (err) {
